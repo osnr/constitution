@@ -17,10 +17,10 @@ module.exports = React.createClass({
     render: function(): ?ReactElement {
         return (
             <Group {...this.props}>
-                <Text y={35} font="10px Helvetica" fill="black"
+                <Text y={this.props.centerY} font="10px Helvetica" fill="black"
                       onClick={this.handleClick}>
                     {'< Year ' + this.props.simulator.currentTime + '\n\n' +
-                     'Year ' + (this.props.simulator.currentTime + 2) + ' >'}
+                     '    Year ' + (this.props.simulator.currentTime + 2) + ' >'}
                 </Text>
                 <Group x={60} opacity={0.6}>
                     {React.Children.map(this.props.children, (item, i) => {

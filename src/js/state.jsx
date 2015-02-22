@@ -77,11 +77,19 @@ var Voting = React.createClass({
 module.exports = React.createClass({
     render: function() {
         var votings = [];
-        this.props.model.houseVotes.forEach((vote, i) => {
-            votings.push(<Voting x={5} y={20+45*votings.length} width={60} height={40}
-                                 stateName={this.props.model.name}
-                                 vote={vote} seat={i} choosing="house"/>);
-        });
+        if (this.props.choosing == 'house') {
+            this.props.model.houseVotes.forEach((vote, i) => {
+                votings.push(<Voting x={5} y={20+45*votings.length} width={60} height={40}
+                                     stateName={this.props.model.name}
+                                     vote={vote} seat={i} choosing="house"/>);
+            });
+        } else if (this.props.choosing == 'senate') {
+            [this.props.model.senateVotes1,this.props.model.senateVotes2].forEach((vote, i) => {
+                votings.push(<Voting x={5} y={20+30*votings.length} width={60} height={25}
+                                     stateName={this.props.model.name}
+                                     vote={vote} seat={i} choosing="senate"/>);
+            });
+        }
 
         return (
             <Group {...this.props}>

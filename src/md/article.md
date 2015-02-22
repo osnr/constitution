@@ -39,10 +39,10 @@ the State Legislature.
 
 <Interact width={600} height={600} style={{margin: '0 auto', display: 'block'}}>
 <House x={50} ident="house-sec2" />
-<Stepper x={200}>
+<Stepper x={200} centerY={35}>
 <House />
 </Stepper>
-<States y={100}/>
+<States choosing="house" y={100}/>
 </Interact>
 
 No Person shall be a Representative who shall not have attained to the Age of
@@ -81,6 +81,14 @@ shall have the sole Power of Impeachment.
 The Senate of the United States shall be composed of two Senators from each
 State, chosen by the Legislature thereof, for six Years; and each Senator shall
 have one Vote.
+
+<Interact width={600} height={290} style={{margin: '0 auto', display: 'block'}}>
+<Senate x={50} ident="senate-sec3" />
+<Stepper x={250} centerY={5}>
+<Senate />
+</Stepper>
+<States choosing="senate" y={100}/>
+</Interact>
 
 Immediately after they shall be assembled in Consequence of the first Election,
 they shall be divided as equally as may be into three Classes. The Seats of the
