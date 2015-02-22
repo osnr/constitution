@@ -1,5 +1,12 @@
 body {
-    font-family: Helvetica;
+    font-family: Charlotte Std, Georgia, serif;
+    font-size: 13pt;
+    line-height: 130%;
+}
+
+h1, h2, h3 {
+    font-family: Charlotte Sans Std, Helvetica, sans-serif;
+    line-height: 120%;
 }
 
 .pointer {

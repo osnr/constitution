@@ -67,7 +67,13 @@ module.exports = React.createClass({
                 </Text>
                 <Group x="77">
                     <Senate ident={this.props.ident + '/senate'} />
+                    <Text x="65" y="5" fill="black" font="normal 9pt Helvetica">
+                        Senate
+                    </Text>
                     <House y="20" ident={this.props.ident + '/house'} />
+                    <Text x="65" y="35" fill="black" font="normal 9pt Helvetica">
+                        House
+                    </Text>
                 </Group>
             </Group>
         );

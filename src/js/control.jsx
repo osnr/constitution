@@ -31,11 +31,7 @@ module.exports = {
         if (!components[ident]) throw "fail";
 
         for (var k in components) {
-            if (k == ident) {
-                components[k].setState({ pointing: NotPointing });
-            } else {
-                components[k].setState({ pointing: NotPointing });
-            }
+            components[k].setState({ pointing: NotPointing });
         }
     }
 };
