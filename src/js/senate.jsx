@@ -25,7 +25,7 @@ module.exports = React.createClass({
                 <Rectangle {...this.props}
                            width={60} height={20}
                            fill="#002768"></Rectangle>
-                <Text x="5" y="5" fill="black" font="normal 9pt Helvetica">
+                <Text x="5" y="5" fill="white" font="normal 9pt Helvetica">
                     Senate
                 </Text>
             </Group>

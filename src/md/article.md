@@ -44,7 +44,7 @@ No Person shall be a Representative who shall not have attained to the Age of
 twenty five Years, and been seven Years a Citizen of the United States, and who
 shall not, when elected, be an Inhabitant of that State in which he shall be
 chosen.
-
+_
 Representatives and direct Taxes shall be apportioned among the several States
 which may be included within this Union, according to their respective Numbers,
 which shall be determined by adding to the whole Number of free Persons,
