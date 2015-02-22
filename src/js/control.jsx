@@ -19,7 +19,7 @@ module.exports = {
     Elsewhere: Elsewhere,
     Here: Here,
 
-    register: function(ident: Ident, kind: string, component: ReactComponent) {
+    register: function(ident: ?Ident, kind: string, component: ReactComponent) {
         if (!ident) {
             ident = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -53,7 +53,17 @@ module.exports = {
         }
     },
 
-    vote: function(choosing: string, seat: number, vote: number) {
-        
+    vote: function(interact: ReactComponent, stateName: string, choosing: string, seat: number,
+                   vote: number) {
+        if (choosing === 'house') {
+            console.log('vote', registry, interact);
+            for (var k in registry) {
+                if (registry[k].component == interact) {
+                    var model = registry[k].component.state.simulator.currentModel;
+                    model.states[stateName].houseVotes[seat] = vote;
+                    registry[k].component.forceUpdate();
+                }
+            }
+        }
     }
 };

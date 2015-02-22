@@ -7,6 +7,8 @@ var Group = ReactART.Group;
 var Text = ReactART.Text;
 var Surface = ReactART.Surface;
 
+var Simulator = require('./simulator.jsx');
+
 module.exports = React.createClass({
     handleClick: function() {
         
@@ -19,7 +21,12 @@ module.exports = React.createClass({
                       onClick={this.handleClick}>
                     Next
                 </Text>
-                {this.props.children}
+                {React.Children.map(this.props.children, (item, i) => {
+                    return React.addons.cloneWithProps(item, {
+                        interact: this,
+                        model: Simulator.narrowModel(item.type.displayName, this.props.simulator.peek())
+                    });
+                 })}
             </Group>
         );
     }

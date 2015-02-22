@@ -19,6 +19,10 @@ type StateModel = {
 };
 
 var Voting = React.createClass({
+    contextTypes: {
+        interact: React.PropTypes.any.isRequired
+    },
+
     getInitialState: function() {
         return { mouseDown: null };
     },
@@ -35,7 +39,8 @@ var Voting = React.createClass({
         if (!this.state.mouseDown) return;
 
         var dx = e.pageX - this.state.mouseDown.pageX;
-        Control.vote(this.props.choosing, this.props.seat,
+        Control.vote(this.context.interact,
+                     this.props.stateName, this.props.choosing, this.props.seat,
                      Math.max(0.01,
                               Math.min(0.99,
                                        this.state.mouseDown.percent +
@@ -72,8 +77,9 @@ var Voting = React.createClass({
 module.exports = React.createClass({
     render: function() {
         var votings = [];
-        this.props.model.houseVotes.forEach(function(vote, i) {
+        this.props.model.houseVotes.forEach((vote, i) => {
             votings.push(<Voting x={5} y={20+45*votings.length} width={60} height={40}
+                                 stateName={this.props.model.name}
                                  vote={vote} seat={i} choosing="house"/>);
         });
 

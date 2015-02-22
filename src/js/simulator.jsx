@@ -242,6 +242,16 @@ class Simulator {
     getModel(): Model {
         return this.currentModel;
     }
+
+    // drill into the top-level model and get what this component needs
+    static narrowModel(kind: string, m: Model): StatesModel | CongressModel | HouseModel | SenateModel {
+        return {
+            'States': m.states,
+            'Congress': m.congress,
+            'House': m.congress.house,
+            'Senate': m.congress.senate
+        }[kind];
+    }
 }
 
 module.exports = Simulator;
