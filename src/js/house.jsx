@@ -9,13 +9,13 @@ var Rectangle = require('./rectangle.jsx');
 
 var Control = require('./control.jsx');
 
-module.exports = React.createClass({
+var House = React.createClass({
     getInitialState: function() {
         return { pointing: Control.NotPointing };
     },
 
     componentDidMount: function() {
-        Control.register(this.props.ident, this);
+        Control.register(this.props.ident, 'House', this);
     },
 
     render: function() {
@@ -31,3 +31,4 @@ module.exports = React.createClass({
         );
     }
 });
+module.exports = House;

@@ -12,9 +12,9 @@ var Control = require('./control.jsx');
 var Senate = require('./senate.jsx');
 var House = require('./house.jsx');
 
-module.exports = React.createClass({
+var Congress = React.createClass({
     componentDidMount: function() {
-        Control.register(this.props.ident, this);
+        Control.register(this.props.ident, 'Congress', this);
     },
 
     render: function() {
@@ -36,3 +36,4 @@ module.exports = React.createClass({
         );
     }
 });
+module.exports = Congress;

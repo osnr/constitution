@@ -1,77 +1,55 @@
 /* @flow */
 
-// model
-type StateId = string;
-type Party = boolean;
-type Congresscritter = {
-    party: Party;
-    state: StateId // so we can reference back to state?
-};
-
-type SenateModel = {
-    class1: Array<Congresscritter>;
-    class2: Array<Congresscritter>;
-    class3: Array<Congresscritter>;
-};
-type HouseModel = { [key: StateId]: Array<Congresscritter> };
-type CongressModel = {
-    senate: SenateModel;
-    house: HouseModel;
-};
-
-type StateModel = {
-    name: string;
-    population: number;
-    houseVotes: Array<Array<?Party>>;
-    senateVotes1: Array<?Party>;
-    senateVotes2: Array<?Party>;
-};
-type StatesModel = { [key: StateId]: StateModel };
-
-type Model = {
-    congress: CongressModel;
-    states: StatesModel;
-};
-
 // sim
-var Simulator = require('./simulator.jsx');
-
 class NotPointing {}
 class Elsewhere {}
 class Here {}
 type Pointing = NotPointing | Elsewhere | Here;
 
-var components = {};
+type Ident = string;
+type Registry = { [key: Ident]: {
+    kind: string;
+    component: ReactComponent
+}};
+
+var registry: Registry = {};
+
 module.exports = {
     NotPointing: NotPointing,
     Elsewhere: Elsewhere,
     Here: Here,
 
-    register: function(ident: string, component: ReactComponent) {
-        components[ident] = component;
+    register: function(ident: Ident, kind: string, component: ReactComponent) {
+        if (!ident) {
+            ident = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+                return v.toString(16);
+            });
+        }
+
+        registry[ident] = {
+            kind: kind,
+            component: component
+        };
     },
 
     point: function(ident: string): void {
-        if (!components[ident]) throw "fail";
+        if (!registry[ident]) throw "fail";
 
-        for (var k in components) {
+        for (var k in registry) {
             if (k == ident) {
-                components[k].setState({ pointing: Here });
+                registry[k].component.setState({ pointing: Here });
             } else {
-                components[k].setState({ pointing: Elsewhere });
+                registry[k].component.setState({ pointing: Elsewhere });
             }
         }
     },
 
     unpoint: function(ident: string): void {
-        if (!components[ident]) throw "fail";
+        if (!registry[ident]) throw "fail";
 
-        for (var k in components) {
-            components[k].setState({ pointing: NotPointing });
+        for (var k in registry) {
+            registry[k].component.setState({ pointing: NotPointing });
         }
-    },
-
-    update: function(m: Model) {
-        
     }
 };
