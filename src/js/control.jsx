@@ -91,5 +91,12 @@ module.exports = {
                 registry[k].component.forceUpdate();
             }
         }
+    },
+
+    step: function(interact: ReactComponent, n: number) {
+        for (var i = 0; i < n; i++) {
+            interact.state.simulator.step();
+        }
+        interact.setState({ model: interact.state.simulator.getModel() });
     }
 };

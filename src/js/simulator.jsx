@@ -217,7 +217,8 @@ class Simulator {
                     [ret, nextActions] = action(ret);
 
                     nextActions.next.forEach(function([delay, action]) {
-                        tempAgenda[t + delay] = action;
+                        tempAgenda[t + delay] = tempAgenda[t + delay] || [];
+                        tempAgenda[t + delay].push(action);
                     });
                 });
             }
@@ -231,13 +232,14 @@ class Simulator {
         var actions: [Action] = this.agenda[this.currentTime];
 
         var ret = this.currentModel;
-        actions.forEach(function(action) {
+        (actions || []).forEach((action) => {
             var nextActions: ?NextActions;
             [ret, nextActions] = action(ret);
 
             nextActions.next.forEach(function([delay, action]) {
-                this.agenda[this.currentTime + delay] = action;
-            });
+                this.agenda[this.currentTime + delay] = this.agenda[this.currentTime + delay] || [];
+                this.agenda[this.currentTime + delay].push(action);
+            }.bind(this));
         });
 
         this.currentTime += 1;

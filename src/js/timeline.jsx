@@ -26,7 +26,7 @@ var Timeline = React.createClass({
         }
 
         if (this.props.preview) {
-            notches.push(<Rectangle x={parseInt(this.props.preview)*25 - 1}
+            notches.push(<Rectangle x={(this.props.simulator.currentTime + parseInt(this.props.preview))*25 - 1}
                                     y={10} height={10} width={2}
                                     fill="#555" />);
         }
