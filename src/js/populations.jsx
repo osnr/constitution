@@ -33,7 +33,7 @@ var Population = React.createClass({
         var dy = e.pageY - this.state.mouseDown.pageY;
         Control.setPopulation(this.context.interact,
                               this.props.model.name,
-                              this.state.mouseDown.population + (dy / (this.props.model.population/8000)));
+                              Math.max(30000, this.state.mouseDown.population + (dy / (this.state.mouseDown.population/8000))*this.state.mouseDown.population));
     },
     handleMouseUp: function(e) {
         this.setState({ mouseDown: null });

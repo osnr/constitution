@@ -50,29 +50,41 @@ class NextActions {
 type Action = (m: Model) => [Model, NextActions];
 
 // helpers
-var makeStates = function(data: {[key: string]: number}): StatesModel {
-    var makeState = function(name: string, population: number): StateModel {
-        var houseSeats = Math.min(5, Math.ceil(population / 60000)); // HACK
-        var houseVotes = [];
-        for (var i = 0; i < houseSeats; i++) {
-            houseVotes.push(Math.random());
-        }
+var makeState = function(name: string, population: number): StateModel {
+    var houseSeats = Math.min(5, Math.ceil(population / 60000)); // HACK
+    var houseVotes = [];
+    for (var i = 0; i < houseSeats; i++) {
+        houseVotes.push(Math.random());
+    }
 
-        return {
-            name: name,
-            population: population,
-            houseVotes: houseVotes,
-            senateVotes1: Math.random(),
-            senateVotes2: Math.random()
-        };
+    return {
+        name: name,
+        population: population,
+        houseVotes: houseVotes,
+        senateVotes1: Math.random(),
+        senateVotes2: Math.random()
     };
+};
 
+var makeStates = function(data: {[key: string]: number}): StatesModel {
     var statesModel = {};
     for (var name in data) {
         statesModel[name] = makeState(name, data[name]);
     }
 
     return statesModel;
+};
+
+var addRepsFrom = function(stateName, states: StatesModel, house: HouseModel) {
+    var houseSeats = Math.min(5, Math.ceil(states[stateName].population / 60000)); // should be 30k but that's a lot of reps
+    house[stateName] = [];
+
+    for (var i = 0; i < houseSeats; i++) {
+        house[stateName].push({
+            party: states[stateName].houseVotes[i] > 0.5,
+            state: stateName
+        });
+    }
 };
 
 class Simulator {
@@ -139,18 +151,7 @@ class Simulator {
             Object.keys(stateData).forEach(addSenatorFrom);
 
             var house = {};
-            var addRepsFrom = function(stateName) {
-                var houseSeats = Math.min(5, Math.ceil(stateData[stateName] / 60000)); // should be 30k but that's a lot of reps
-                house[stateName] = [];
-
-                for (var i = 0; i < houseSeats; i++) {
-                    house[stateName].push({
-                        party: states[stateName].houseVotes[i] > 0.5,
-                        state: stateName
-                    });
-                }
-            };
-            Object.keys(stateData).forEach(addRepsFrom);
+            Object.keys(stateData).forEach((stateName) => addRepsFrom(stateName, states, house));
 
             return {
                 congress: {
@@ -160,6 +161,13 @@ class Simulator {
                 states: states
             };
         })();
+    }
+
+    // HACK outsiders might call this, and it nukes a lot of stuff
+    // (also just a useful utility method)
+    populateState(stateId: string, population: number): void {
+        this.currentModel.states[stateId] = makeState(stateId, population);
+        addRepsFrom(stateId, this.currentModel.states, this.currentModel.congress.house);
     }
 
     // do something after n years

@@ -58,6 +58,7 @@ module.exports = {
         if (choosing === 'house') {
             for (var k in registry) {
                 if (registry[k].component == interact) {
+                    registry[k].component.state.simulator = registry[k].component.state.simulator;
                     var model = registry[k].component.state.simulator.currentModel;
                     model.states[stateName].houseVotes[seat] = vote;
                     registry[k].component.forceUpdate();
@@ -69,9 +70,10 @@ module.exports = {
     setPopulation: function(interact: ReactComponent, stateName: string, population: number) {
         for (var k in registry) {
             if (registry[k].kind == 'Interact') { // makin' this global in an ad-hoc way
-                var model = registry[k].component.state.simulator.currentModel;
-                console.log(model, model.states[stateName]);
-                model.states[stateName].population = population;
+                var sim = registry[k].component.state.simulator;
+
+                sim.populateState(stateName, population);
+
                 registry[k].component.forceUpdate();
             }
         }
