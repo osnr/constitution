@@ -1,9 +1,12 @@
 ---
 title: The United States Constitution
 scope:
-    Sim: ../js/sim.jsx
+    Interact: ../js/interact.jsx
     Pointer: ../js/pointer.jsx
+    House: ../js/house.jsx
+    Senate: ../js/senate.jsx
     Congress: ../js/congress.jsx
+    States: ../js/states.jsx
 ---
 
 #The United States Constitution
@@ -21,7 +24,9 @@ United States of America.
 All legislative Powers herein granted shall be vested in a <Pointer ident="congress-sec1">Congress of the
 United States</Pointer>, which shall consist of a <Pointer ident="congress-sec1/senate">Senate</Pointer> and <Pointer ident="congress-sec1/house">House of Representatives</Pointer>.
 
-<Sim><Congress ident="congress-sec1" /></Sim>
+<Interact width={200} height={100} style={{margin: '0 auto', display: 'block'}}>
+<Congress ident="congress-sec1" />
+</Interact>
 
 ###Section 2
 
@@ -29,6 +34,11 @@ The House of Representatives shall be composed of Members chosen every second
 Year by the People of the several States, and the Electors in each State shall
 have the Qualifications requisite for Electors of the most numerous Branch of
 the State Legislature.
+
+<Interact width={250} height={300} style={{float: "left"}}>
+<House ident="house" />
+<States />
+</Interact>
 
 No Person shall be a Representative who shall not have attained to the Age of
 twenty five Years, and been seven Years a Citizen of the United States, and who
@@ -40,6 +50,11 @@ which may be included within this Union, according to their respective Numbers,
 which shall be determined by adding to the whole Number of free Persons,
 including those bound to Service for a Term of Years, and excluding Indians not
 taxed, three fifths of all other Persons.
+
+<Interact>
+<Congress ident="congress-sec2" />
+<States />
+</Interact>
 
 The actual Enumeration shall be made within three Years after the first Meeting
 of the Congress of the United States, and within every subsequent Term of ten
