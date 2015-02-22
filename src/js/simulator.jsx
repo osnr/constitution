@@ -2,8 +2,8 @@
 
 var Control = require('./control.jsx');
 
-var addons = require('react/addons');
-var update = addons.update;
+var React = require('react/addons');
+var update = React.addons.update;
 
 // model
 type StateId = string;
@@ -83,12 +83,13 @@ class Simulator {
     currentModel: Model;
 
     // agenda / action management
-    agenda: { [key: Time]: [Action] };
+    agenda: { [key: Time]: Array<Action> };
 
     constructor() {
         this.currentTime = 0;
         this.history = {};
         this.agenda = {};
+        this.agenda[2] = [this.houseVote.bind(this)];
 
         this.currentModel = (function() {
             var stateData = {
@@ -177,10 +178,12 @@ class Simulator {
                 var state: StateModel = m.states[stateId];
 
                 updater[stateId] = {};
-                updater[stateId][0] = {$set: {
-                    party: state.houseVotes[0] > 0.5,
-                    stateId: stateId
-                }};
+                for (var seat = 0; seat < state.houseVotes.length; seat++) {
+                    updater[stateId][seat] = {$set: {
+                        party: state.houseVotes[seat] > 0.5,
+                        stateId: stateId
+                    }};
+                }
             }
             return update(house, updater);
         };
@@ -206,13 +209,24 @@ class Simulator {
     }
 
     // see future without updating
-    peek(): Model {
-        var actions: [Action] = this.agenda[this.currentTime];
+    peek(n: number = 1): Model {
+        var tempAgenda = {};
 
-        var ret = this.currentModel;
-        actions.forEach(function(action) {
-            [ret,] = action(ret);
-        });
+        for (var t = this.currentTime + 1; t <= this.currentTime + n; t++) {
+            var actions: [Action] = (this.agenda[t] || []).concat(tempAgenda[t] || []);
+
+            var ret = this.currentModel;
+            if (actions) {
+                actions.forEach(function(action) {
+                    var nextActions: ?NextActions;
+                    [ret, nextActions] = action(ret);
+
+                    nextActions.next.forEach(function([delay, action]) {
+                        tempAgenda[t + delay] = action;
+                    });
+                });
+            }
+        }
 
         return ret;
     }

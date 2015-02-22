@@ -56,7 +56,6 @@ module.exports = {
     vote: function(interact: ReactComponent, stateName: string, choosing: string, seat: number,
                    vote: number) {
         if (choosing === 'house') {
-            console.log('vote', registry, interact);
             for (var k in registry) {
                 if (registry[k].component == interact) {
                     var model = registry[k].component.state.simulator.currentModel;

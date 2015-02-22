@@ -38,6 +38,9 @@ the State Legislature.
 
 <Interact width={600} height={600} style={{margin: '0 auto', display: 'block'}}>
 <House x={50} ident="house-sec2" />
+<Stepper x={200}>
+<House />
+</Stepper>
 <States y={100}/>
 </Interact>
 
