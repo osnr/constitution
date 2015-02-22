@@ -8,6 +8,7 @@ scope:
     Congress: ../js/congress.jsx
     States: ../js/states.jsx
     Populations: ../js/populations.jsx
+    Timeline: ../js/timeline.jsx
     Stepper: ../js/stepper.jsx
 ---
 
@@ -37,12 +38,14 @@ Year by the People of the several States, and the Electors in each State shall
 have the Qualifications requisite for Electors of the most numerous Branch of
 the State Legislature.
 
-<Interact width={600} height={600} style={{margin: '0 auto', display: 'block'}}>
-<House x={100} ident="house-sec2" />
-<Stepper x={250} centerY={35} step={2}>
+<Interact width={600} height={640} style={{margin: '0 auto', display: 'block'}}>
+<Timeline x={80} width={380} preview="2" />
+
+<House x={100} y={40} ident="house-sec2" />
+<Stepper x={250} y={40} centerY={35} step={2}>
 <House />
 </Stepper>
-<States choosing="house" y={100}/>
+<States choosing="house" y={140}/>
 </Interact>
 
 No Person shall be a Representative who shall not have attained to the Age of

@@ -22,7 +22,7 @@ module.exports = React.createClass({
                     {'< Year ' + this.props.simulator.currentTime + '\n\n' +
                      '    Year ' + (this.props.simulator.currentTime + this.props.step) + ' >'}
                 </Text>
-                <Group x={60} opacity={0.6}>
+                <Group x={60} opacity={0.6} onClick={()=>{alert('simulate')}}>
                     {React.Children.map(this.props.children, (item, i) => {
                         return React.addons.cloneWithProps(item, {
                             interact: this,

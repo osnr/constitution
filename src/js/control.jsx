@@ -39,7 +39,7 @@ module.exports = {
         for (var k in registry) {
             if (k == ident) {
                 registry[k].component.setState({ pointing: Here });
-            } else {
+            } else if (!k.startsWith(ident)) {
                 registry[k].component.setState({ pointing: Elsewhere });
             }
         }
