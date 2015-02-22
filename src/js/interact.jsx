@@ -3,7 +3,6 @@
 var React = require('react/addons');
 
 var ReactART = require('react-art');
-var Text = ReactART.Text;
 var Surface = ReactART.Surface;
 
 var Simulator = require('./simulator.jsx');
@@ -72,12 +71,10 @@ module.exports = React.createClass({
             <Surface {...this.props}>
                 {React.Children.map(this.props.children, (item, i) => {
                     return React.addons.cloneWithProps(item, {
+                        interact: this,
                         model: narrowModel(item, this.state.model)
                     });
                  })}
-                <Text y={this.props.height - 20} font="14pt Arial" fill="black">
-                    Next
-                </Text>
             </Surface>
         );
     }

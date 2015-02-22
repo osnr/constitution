@@ -20,17 +20,18 @@ var Congress = React.createClass({
     render: function() {
         return (
             <Group>
-                <Text x={0} y={25}
-                      fill="black" font="normal 9pt Helvetica">
+                <Text x={0} y={62}
+                      fill="black" font="bold 10px Helvetica">
                     Congress
                 </Text>
-                <Text x={52} y={10}
-                      fill="black" font="normal 40pt Helvetica Narrow">
+                <Text x={58} y={12}
+                      transform={new Transform().transform(1, 0, 0, 3.5)}
+                      fill="black" font="normal 30pt Helvetica">
                     &#123;
                 </Text>
                 <Group x={77}>
-                    <Senate ident={this.props.ident + '/senate'} />
-                    <House y={25} ident={this.props.ident + '/house'} />
+                    <Senate model={this.props.model.senate} ident={this.props.ident + '/senate'} />
+                    <House y={50} model={this.props.model.house} ident={this.props.ident + '/house'} />
                 </Group>
             </Group>
         );

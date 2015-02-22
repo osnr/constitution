@@ -23,9 +23,9 @@ var Senate = React.createClass({
             <Group {...this.props}
                    opacity={this.state.pointing != Control.Elsewhere ? 1 : 0.5}>
                 <Rectangle {...this.props}
-                           width={60} height={20}
+                           width={140} height={40}
                            fill="#002768"></Rectangle>
-                <Text x="5" y="5" fill="white" font="normal 9pt Helvetica">
+                <Text x="5" y="5" fill="white" font="bold 10px Helvetica">
                     Senate
                 </Text>
             </Group>

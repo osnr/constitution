@@ -51,5 +51,9 @@ module.exports = {
         for (var k in registry) {
             registry[k].component.setState({ pointing: NotPointing });
         }
+    },
+
+    vote: function(choosing: string, seat: number, vote: number) {
+        
     }
 };

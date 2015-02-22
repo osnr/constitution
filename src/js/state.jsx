@@ -7,6 +7,8 @@ var Group = ReactART.Group;
 var Text = ReactART.Text;
 var Rectangle = require('./rectangle.jsx');
 
+var Control = require('./control.jsx');
+
 type Party = boolean;
 type StateModel = {
     name: string;
@@ -18,21 +20,50 @@ type StateModel = {
 
 var Voting = React.createClass({
     getInitialState: function() {
-        return { percent: 0.51 };
+        return { mouseDown: null };
     },
 
     handleMouseDown: function(e) {
-        console.log(e);
+        // we will track the delta because react-art doesn't know anything about locations
+        this.setState({ mouseDown: {
+            pageX: e.pageX,
+            pageY: e.pageY,
+            percent: this.props.vote
+        }});
+    },
+    handleMouseMove: function(e) {
+        if (!this.state.mouseDown) return;
+
+        var dx = e.pageX - this.state.mouseDown.pageX;
+        Control.vote(this.props.choosing, this.props.seat,
+                     Math.max(0.01,
+                              Math.min(0.99,
+                                       this.state.mouseDown.percent +
+                                       (dx / this.props.width))));
+    },
+    handleMouseUp: function(e) {
+        this.setState({ mouseDown: null });
     },
 
     render: function() {
         return (
             <Group {...this.props}
-                   onMouseDown={this.handleMouseDown}>
-                <Rectangle height={6} width={12}
-                           fill={this.state.vote ? "blue" : "red"} />
-                <Rectangle y={6} height={6} width={12}
-                           fill={this.state.vote ? "blue" : "red"} />
+
+                   onMouseOver={() => {document.body.style.cursor = 'col-resize';}}
+                   onMouseOut={() => {document.body.style.cursor = '';}}
+
+                   onMouseDown={this.handleMouseDown}
+                   onMouseMove={this.handleMouseMove}
+                   onMouseUp={this.handleMouseUp}>
+                <Rectangle height={this.props.height} 
+                           width={this.props.width*this.props.vote}
+                           opacity={Math.min(1, Math.max(0.10, this.props.vote*1.2))}
+                           fill={"blue"} />
+                <Rectangle x={this.props.width*this.props.vote}
+                           height={this.props.height} 
+                           width={this.props.width*(1-this.props.vote)}
+                           opacity={Math.min(1, Math.max(0.10, (1-this.props.vote)*1.2))}
+                           fill={"red"} />
             </Group>
         );
     }
@@ -40,15 +71,20 @@ var Voting = React.createClass({
 
 module.exports = React.createClass({
     render: function() {
+        var votings = [];
+        this.props.model.houseVotes.forEach(function(vote, i) {
+            votings.push(<Voting x={5} y={20+45*votings.length} width={60} height={40}
+                                 vote={vote} seat={i} choosing="house"/>);
+        });
+
         return (
             <Group {...this.props}>
-                <Rectangle width={50} height={60}
-                           fill="orange">
-                </Rectangle>
-                <Text fill="black" font="10px Helvetica">
+                <Rectangle width={70} height={60} />
+                <Text x={5} y={5}
+                      fill="black" font="10px Helvetica">
                     {this.props.model.name}
                 </Text>
-                <Voting x={4} y={24} />
+                {votings}
             </Group>
         );
     }

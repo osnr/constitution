@@ -7,6 +7,7 @@ scope:
     Senate: ../js/senate.jsx
     Congress: ../js/congress.jsx
     States: ../js/states.jsx
+    Stepper: ../js/stepper.jsx
 ---
 
 #The United States Constitution
@@ -24,7 +25,7 @@ United States of America.
 All legislative Powers herein granted shall be vested in a <Pointer ident="congress-sec1">Congress of the
 United States</Pointer>, which shall consist of a <Pointer ident="congress-sec1/senate">Senate</Pointer> and <Pointer ident="congress-sec1/house">House of Representatives</Pointer>.
 
-<Interact width={200} height={100} style={{margin: '0 auto', display: 'block'}}>
+<Interact width={240} height={150} style={{margin: '0 auto', display: 'block'}}>
 <Congress ident="congress-sec1" />
 </Interact>
 
@@ -35,16 +36,16 @@ Year by the People of the several States, and the Electors in each State shall
 have the Qualifications requisite for Electors of the most numerous Branch of
 the State Legislature.
 
-<Interact width={250} height={300} style={{float: "left"}}>
-<House ident="house" />
-<States />
+<Interact width={600} height={600} style={{margin: '0 auto', display: 'block'}}>
+<House x={50} ident="house-sec2" />
+<States y={100}/>
 </Interact>
 
 No Person shall be a Representative who shall not have attained to the Age of
 twenty five Years, and been seven Years a Citizen of the United States, and who
 shall not, when elected, be an Inhabitant of that State in which he shall be
 chosen.
-_
+
 Representatives and direct Taxes shall be apportioned among the several States
 which may be included within this Union, according to their respective Numbers,
 which shall be determined by adding to the whole Number of free Persons,

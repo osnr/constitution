@@ -7,6 +7,7 @@ var update = addons.update;
 
 // model
 type StateId = string;
+type Vote = number;
 type Party = boolean;
 type Congresscritter = {
     party: Party;
@@ -27,9 +28,9 @@ type CongressModel = {
 type StateModel = {
     name: string;
     population: number;
-    houseVotes: Array<Array<?Party>>;
-    senateVotes1: Array<?Party>;
-    senateVotes2: Array<?Party>;
+    houseVotes: Array<Vote>;
+    senateVotes1: Vote;
+    senateVotes2: Vote;
 };
 type StatesModel = { [key: StateId]: StateModel };
 
@@ -39,23 +40,30 @@ type Model = {
 };
 
 type Time = number;
-type Action = (m: Model) => Model;
+
+class NextActions {
+    next: Array<[Time, Action]>;
+    constructor(next: typeof NextActions.next) {
+        this.next = next;
+    }
+}
+type Action = (m: Model) => [Model, NextActions];
 
 // helpers
 var makeStates = function(data: {[key: string]: number}): StatesModel {
     var makeState = function(name: string, population: number): StateModel {
-        var houseSeats = Math.ceil(population / 30000);
+        var houseSeats = Math.min(5, Math.ceil(population / 60000)); // HACK
         var houseVotes = [];
         for (var i = 0; i < houseSeats; i++) {
-            houseVotes.push([null, null, null]);
+            houseVotes.push(Math.random());
         }
 
         return {
             name: name,
             population: population,
             houseVotes: houseVotes,
-            senateVotes1: [null, null, null],
-            senateVotes2: [null, null, null]
+            senateVotes1: Math.random(),
+            senateVotes2: Math.random()
         };
     };
 
@@ -84,19 +92,19 @@ class Simulator {
 
         this.currentModel = (function() {
             var stateData = {
-                "New Hampshire": 30000,
-                "Massachusetts": 30000,
-                "Rhode Island": 30000,
-                "Connecticut": 30000,
-                "New York": 30000,
-                "New Jersey": 30000,
-                "Pennsylvania": 30000,
-                "Delaware": 30000,
-                "Maryland": 30000,
-                "Virginia": 30000,
-                "North Carolina": 30000,
-                "South Carolina": 30000,
-                "Georgia": 30000
+                "New Hampshire": 142000,
+                "Massachusetts": 475000,
+                "Rhode Island": 69000,
+                "Connecticut": 238000,
+                "New York": 340000,
+                "New Jersey": 184000,
+                "Pennsylvania": 434000,
+                "Delaware": 60000,
+                "Maryland": 320000,
+                "Virginia": 821000,
+                "North Carolina": 429000,
+                "South Carolina": 250000,
+                "Georgia": 83000
             };
             var states = makeStates(stateData);
 
@@ -105,9 +113,12 @@ class Simulator {
                 class2: [],
                 class3: []
             };
+            var senatorNum = 0; // HACK
             var addSenatorFrom = function(stateName) {
                 var senator: Congresscritter = {
-                    party: (Math.random() > 0.5) ? true : false,
+                    party: senatorNum == 0 ?
+                        states[stateName].senateVotes1 > 0.5 : 
+                        states[stateName].senateVotes2 > 0.5,
                     state: stateName
                 };
 
@@ -123,16 +134,17 @@ class Simulator {
                 }
             };
             Object.keys(stateData).forEach(addSenatorFrom);
+            senatorNum = 1;
             Object.keys(stateData).forEach(addSenatorFrom);
 
             var house = {};
             var addRepsFrom = function(stateName) {
-                var houseSeats = Math.ceil(stateData[stateName] / 30000);
+                var houseSeats = Math.min(5, Math.ceil(stateData[stateName] / 60000)); // should be 30k but that's a lot of reps
                 house[stateName] = [];
 
                 for (var i = 0; i < houseSeats; i++) {
                     house[stateName].push({
-                        party: (Math.random() > 0.5) ? true : false,
+                        party: states[stateName].houseVotes[i] > 0.5,
                         state: stateName
                     });
                 }
@@ -149,15 +161,13 @@ class Simulator {
         })();
     }
 
-    // action methods
-
-
     // do something after n years
     afterDelay(delay: Time, action: Action): void {
         this.agenda[delay + this.currentTime].push(action);
     };
 
-    houseVote(m: Model): Model {
+    // actions. these are pure functions!
+    houseVote(m: Model): [Model, NextActions] {
         var electHouse = function(house: HouseModel): HouseModel {
             var updater = {};
 
@@ -166,28 +176,9 @@ class Simulator {
             for (var stateId in m.states) {
                 var state: StateModel = m.states[stateId];
 
-                for (var i = 0; i < state.houseVotes[0].length; i++) {
-                    var party = state.houseVotes[0][i];
-
-                    if (party in votes) {
-                        votes[party] += 1;
-                    } else {
-                        votes[party] = 0;
-                    }
-                }
-
-                var winnerVotes: number = 0;
-                var winner: Party = m.congress.house[stateId][0];
-                for (var party in votes) {
-                    if (votes[party] > winnerVotes) {
-                        winner = party;
-                        winnerVotes = votes[party];
-                    }
-                }
-
                 updater[stateId] = {};
                 updater[stateId][0] = {$set: {
-                    party: winner,
+                    party: state.houseVotes[0] > 0.5,
                     stateId: stateId
                 }};
             }
@@ -211,7 +202,17 @@ class Simulator {
             congress: {house: electHouse(m.congress.house)}
         }});
 
-        this.afterDelay(2, this.houseVote);
+        return [ret, new NextActions([[2, this.houseVote]])];
+    }
+
+    // see future without updating
+    peek(): Model {
+        var actions: [Action] = this.agenda[this.currentTime];
+
+        var ret = this.currentModel;
+        actions.forEach(function(action) {
+            [ret,] = action(ret);
+        });
 
         return ret;
     }
@@ -220,12 +221,17 @@ class Simulator {
         // update
         var actions: [Action] = this.agenda[this.currentTime];
 
-        this.currentTime += 1;
-
         var ret = this.currentModel;
         actions.forEach(function(action) {
-            ret = action(ret);
+            var nextActions: ?NextActions;
+            [ret, nextActions] = action(ret);
+
+            nextActions.next.forEach(function([delay, action]) {
+                this.agenda[this.currentTime + delay] = action;
+            });
         });
+
+        this.currentTime += 1;
 
         this.history[this.currentTime] = ret;
         this.currentModel = ret;
