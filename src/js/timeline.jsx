@@ -7,9 +7,35 @@ var Group = ReactART.Group;
 var Text = ReactART.Text;
 var Rectangle = require('./rectangle.jsx');
 
+var Control = require('./control.jsx');
+
 var Timeline = React.createClass({
     contextTypes: {
         interact: React.PropTypes.any.isRequired
+    },
+
+    getInitialState: function() {
+        return { mouseDown: null };
+    },    
+    handleMouseDown: function(e) {
+        // we will track the delta because react-art doesn't know anything about locations
+        this.setState({ mouseDown: {
+            pageX: e.pageX,
+            time: this.props.simulator.currentTime
+        }});
+    },
+    handleMouseMove: function(e) {
+        if (!this.state.mouseDown) return;
+
+        var dx = e.pageX - this.state.mouseDown.pageX;
+        Control.jump(this.context.interact,
+                     Math.min(this.props.width / 25,
+                              Math.max(0, 
+                                       Math.floor(this.state.mouseDown.time +
+                                                  (dx / 25)))));
+    },
+    handleMouseUp: function(e) {
+        this.setState({ mouseDown: null });
     },
 
     render: function() {
@@ -35,7 +61,10 @@ var Timeline = React.createClass({
                                 fill="black" />);
 
         return (
-            <Group {...this.props}>
+            <Group {...this.props}
+                   onMouseDown={this.handleMouseDown}
+                   onMouseMove={this.handleMouseMove}
+                   onMouseUp={this.handleMouseUp}>
                 <Rectangle y={10} height={10} width={this.props.width}
                            fill={"#d3d7cf"} />
                 {notches}

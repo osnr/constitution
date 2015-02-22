@@ -5,6 +5,8 @@ var Control = require('./control.jsx');
 var React = require('react/addons');
 var update = React.addons.update;
 
+objectAssign = require('object-assign');
+
 // model
 type StateId = string;
 type Vote = number;
@@ -48,6 +50,7 @@ class NextActions {
     }
 }
 type Action = (m: Model) => [Model, NextActions];
+type Agenda = { [key: Time]: Array<Action> };
 
 // helpers
 var makeState = function(name: string, population: number): StateModel {
@@ -91,11 +94,11 @@ class Simulator {
     // model state
     currentTime: Time;
 
-    history: { [key: Time]: Model };
+    history: { [key: Time]: [Model, Agenda] };
     currentModel: Model;
 
     // agenda / action management
-    agenda: { [key: Time]: Array<Action> };
+    agenda: Agenda;
 
     constructor() {
         this.currentTime = 0;
@@ -228,6 +231,11 @@ class Simulator {
     }
 
     step(): Model {
+        this.history[this.currentTime] = [
+            JSON.parse(JSON.stringify(this.currentModel)), // hack
+            objectAssign({}, this.agenda)
+        ];
+
         // update
         var actions: [Action] = this.agenda[this.currentTime];
 
@@ -244,10 +252,23 @@ class Simulator {
 
         this.currentTime += 1;
 
-        this.history[this.currentTime] = ret;
         this.currentModel = ret;
 
         return ret;
+    }
+
+    restore(t: Time): Model {
+        this.history[this.currentTime] = [
+            JSON.parse(JSON.stringify(this.currentModel)), // HACK!!!
+            objectAssign({}, this.agenda)
+        ];
+
+        this.currentTime = t;
+        var snapshot = this.history[t];
+        this.currentModel = snapshot[0];
+        this.agenda = snapshot[1];
+
+        return this.currentModel;
     }
 
     getModel(): Model {

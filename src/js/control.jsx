@@ -98,5 +98,14 @@ module.exports = {
             interact.state.simulator.step();
         }
         interact.setState({ model: interact.state.simulator.getModel() });
+    },
+
+    jump: function(interact: ReactComponent, t: number) {
+        var currentTime = interact.state.simulator.currentTime;
+        if (currentTime < t) {
+            this.step(interact, t - currentTime);
+        } else if (currentTime > t) {
+            interact.setState({ model: interact.state.simulator.restore(t) });
+        }
     }
 };
