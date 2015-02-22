@@ -40,7 +40,7 @@ gulp.task('typecheck', function() {
         .pipe(flow({
             all: false,
             weak: false,
-            declarations: './declarations',
+            declarations: './interfaces',
             killFlow: false,
             beep: true,
             abort: false
@@ -52,7 +52,7 @@ gulp.task('typecheck', function() {
 gulp.task('js', ['clean'], function() {
     // Browserify/bundle the JS.
     browserify(paths.app_js)
-        .transform(reactify, {stripTypes: true})
+        .transform(reactify, {stripTypes: true, es6: true})
         .transform(reactdown)
         .bundle()
         .pipe(source('bundle.js'))
