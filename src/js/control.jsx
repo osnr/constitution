@@ -57,10 +57,24 @@ module.exports = {
                    vote: number) {
         if (choosing === 'house') {
             for (var k in registry) {
-                if (registry[k].component == interact) {
-                    registry[k].component.state.simulator = registry[k].component.state.simulator;
+                if (registry[k].kind == 'Interact') {
                     var model = registry[k].component.state.simulator.currentModel;
+
                     model.states[stateName].houseVotes[seat] = vote;
+                    registry[k].component.forceUpdate();
+                }
+            }
+
+        } else if (choosing === 'senate') {
+            for (var k in registry) {
+                if (registry[k].kind == 'Interact') {
+                    var model = registry[k].component.state.simulator.currentModel;
+
+                    if (seat == 0) {
+                        model.states[stateName].senateVotes1 = vote;
+                    } else if (seat == 1) {
+                        model.states[stateName].senateVotes2 = vote;
+                    }
                     registry[k].component.forceUpdate();
                 }
             }

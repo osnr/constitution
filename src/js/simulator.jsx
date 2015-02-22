@@ -136,10 +136,10 @@ class Simulator {
                 };
 
                 // HACK hardcoded sizes
-                if (senate.class1.length < 4) {
+                if (senate.class1.length < 8) {
                     senate.class1.push(senator);
 
-                } else if (senate.class2.length < 4) {
+                } else if (senate.class2.length < 8) {
                     senate.class2.push(senator);
 
                 } else {
@@ -196,24 +196,11 @@ class Simulator {
             return update(house, updater);
         };
 
-        var clearHouseVote = function(states: StatesModel) {
-            var updater = {};
-            for (var stateId in states) {
-                var state = states[stateId];
+        var ret = update(m, {
+            congress: {house: {$set: electHouse(m.congress.house)}}
+        });
 
-                updater[stateId] = {houseVotes: {}};
-                for (var i = 0; i < state.houseVotes.length; i++) {
-                    updater[stateId].houseVotes[i] = {$set: []};
-                };
-            }
-        };
-
-        var ret = update(m, {$set: {
-            states: clearHouseVote(m.states),
-            congress: {house: electHouse(m.congress.house)}
-        }});
-
-        return [ret, new NextActions([[2, this.houseVote]])];
+        return [ret, new NextActions([[2, this.houseVote.bind(this)]])];
     }
 
     // see future without updating
