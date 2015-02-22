@@ -5,6 +5,7 @@ node_modules/
 [ignore]
 .*/bin/.*
 .*/node_modules/gulp-flowtype/.*
+.*/src/js/main.jsx
 
 [libs]
 interfaces/

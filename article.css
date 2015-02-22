@@ -1,0 +1,13 @@
+body {
+    font-family: Helvetica;
+}
+
+.pointer {
+    color: #222;
+    border-bottom: 1px dotted #222;
+    cursor: help;
+}
+.pointer:hover {
+    color: #11a;
+    border-bottom: 1px dotted #11a;
+}

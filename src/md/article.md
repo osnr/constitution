@@ -1,3 +1,11 @@
+---
+title: The United States Constitution
+scope:
+    Sim: ../js/sim.jsx
+    Pointer: ../js/pointer.jsx
+    Congress: ../js/congress.jsx
+---
+
 #The United States Constitution
 
 We the People of the United States, in Order to form a more perfect Union,
@@ -10,8 +18,10 @@ United States of America.
 
 ###Section 1
 
-All legislative Powers herein granted shall be vested in a Congress of the
-United States, which shall consist of a Senate and House of Representatives.
+All legislative Powers herein granted shall be vested in a <Pointer ident="congress-sec1">Congress of the
+United States</Pointer>, which shall consist of a <Pointer ident="congress-sec1/senate">Senate</Pointer> and <Pointer ident="congress-sec1/house">House of Representatives</Pointer>.
+
+<Sim><Congress ident="congress-sec1" /></Sim>
 
 ###Section 2
 
