@@ -61,7 +61,7 @@ module.exports = {
                     var model = registry[k].component.state.simulator.currentModel;
 
                     model.states[stateName].houseVotes[seat] = vote;
-                    registry[k].component.forceUpdate();
+                    registry[k].component.setState({ model: model });
                 }
             }
 
@@ -75,7 +75,7 @@ module.exports = {
                     } else if (seat == 1) {
                         model.states[stateName].senateVotes2 = vote;
                     }
-                    registry[k].component.forceUpdate();
+                    registry[k].component.setState({ model: model });
                 }
             }
         }
@@ -88,7 +88,7 @@ module.exports = {
 
                 sim.populateState(stateName, population);
 
-                registry[k].component.forceUpdate();
+                registry[k].component.setState({ model: sim.currentModel });
             }
         }
     },

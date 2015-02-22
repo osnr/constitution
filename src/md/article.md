@@ -33,8 +33,8 @@ United States</Pointer>, which shall consist of a <Pointer ident="congress-sec1/
 
 ###Section 2
 
-The <Pointer ident="house-sec2">House of Representatives</Pointer> shall be composed of Members <Pointer>chosen</Pointer> every second
-Year by the People of the several States, and the Electors in each State shall
+The <Pointer ident="house-sec2">House of Representatives</Pointer> shall be composed of Members <Pointer>chosen every second
+Year</Pointer> by the People of the several States, and the Electors in each State shall
 have the Qualifications requisite for Electors of the most numerous Branch of
 the State Legislature.
 

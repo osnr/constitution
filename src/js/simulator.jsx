@@ -176,7 +176,7 @@ class Simulator {
     // do something after n years
     afterDelay(delay: Time, action: Action): void {
         this.agenda[delay + this.currentTime].push(action);
-    };
+    }
 
     // actions. these are pure functions!
     houseVote(m: Model): [Model, NextActions] {
