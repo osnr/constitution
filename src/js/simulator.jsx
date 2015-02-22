@@ -263,7 +263,8 @@ class Simulator {
             'States': m.states,
             'Congress': m.congress,
             'House': m.congress.house,
-            'Senate': m.congress.senate
+            'Senate': m.congress.senate,
+            'Populations': m.states
         }[kind];
     }
 }

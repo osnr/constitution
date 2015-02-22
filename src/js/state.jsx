@@ -63,12 +63,12 @@ var Voting = React.createClass({
                 <Rectangle height={this.props.height} 
                            width={this.props.width*this.props.vote}
                            opacity={Math.min(1, Math.max(0.10, this.props.vote*1.2))}
-                           fill={"blue"} />
+                           fill={"#3465a4"} />
                 <Rectangle x={this.props.width*this.props.vote}
                            height={this.props.height} 
                            width={this.props.width*(1-this.props.vote)}
                            opacity={Math.min(1, Math.max(0.10, (1-this.props.vote)*1.2))}
-                           fill={"red"} />
+                           fill={"#cc0000"} />
             </Group>
         );
     }

@@ -7,6 +7,7 @@ scope:
     Senate: ../js/senate.jsx
     Congress: ../js/congress.jsx
     States: ../js/states.jsx
+    Populations: ../js/populations.jsx
     Stepper: ../js/stepper.jsx
 ---
 
@@ -31,7 +32,7 @@ United States</Pointer>, which shall consist of a <Pointer ident="congress-sec1/
 
 ###Section 2
 
-The House of Representatives shall be composed of Members chosen every second
+The <Pointer ident="house-sec2">House of Representatives</Pointer> shall be composed of Members chosen every second
 Year by the People of the several States, and the Electors in each State shall
 have the Qualifications requisite for Electors of the most numerous Branch of
 the State Legislature.
@@ -55,9 +56,8 @@ which shall be determined by adding to the whole Number of free Persons,
 including those bound to Service for a Term of Years, and excluding Indians not
 taxed, three fifths of all other Persons.
 
-<Interact>
-<Congress ident="congress-sec2" />
-<States />
+<Interact width={150} height={800} style={{float: 'right'}}>
+<Populations />
 </Interact>
 
 The actual Enumeration shall be made within three Years after the first Meeting

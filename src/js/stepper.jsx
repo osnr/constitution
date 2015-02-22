@@ -17,11 +17,12 @@ module.exports = React.createClass({
     render: function(): ?ReactElement {
         return (
             <Group {...this.props}>
-                <Text y={this.props.height - 20} font="14pt Arial" fill="black"
+                <Text y={35} font="10px Helvetica" fill="black"
                       onClick={this.handleClick}>
-                    Next
+                    {'< Year ' + this.props.simulator.currentTime + '\n\n' +
+                     'Year ' + (this.props.simulator.currentTime + 2) + ' >'}
                 </Text>
-                <Group opacity={0.7}>
+                <Group x={60} opacity={0.6}>
                     {React.Children.map(this.props.children, (item, i) => {
                         return React.addons.cloneWithProps(item, {
                             interact: this,

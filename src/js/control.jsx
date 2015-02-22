@@ -64,5 +64,16 @@ module.exports = {
                 }
             }
         }
+    },
+
+    setPopulation: function(interact: ReactComponent, stateName: string, population: number) {
+        for (var k in registry) {
+            if (registry[k].kind == 'Interact') { // makin' this global in an ad-hoc way
+                var model = registry[k].component.state.simulator.currentModel;
+                console.log(model, model.states[stateName]);
+                model.states[stateName].population = population;
+                registry[k].component.forceUpdate();
+            }
+        }
     }
 };

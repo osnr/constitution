@@ -10,7 +10,7 @@ var Rectangle = require('./rectangle.jsx');
 var Congresscritter = React.createClass({
     render: function() {
         return <Rectangle {...this.props} width={5} height={5}
-                          fill={this.props.model.party ? "blue" : "red"} />
+                          fill={this.props.model.party ? "#3465a4" : "#cc0000"} />
     }
 });
 module.exports = Congresscritter;
